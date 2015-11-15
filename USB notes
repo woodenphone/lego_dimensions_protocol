@@ -1,6 +1,7 @@
 Document conventions:
 numbering starts from 0
 
+ALL COMMANDS:
 Always starts with 0x55
 
 
@@ -11,7 +12,7 @@ Always starts with 0x55
 
 
 
-
+Snippet from PuTTY log:
 81[32]: 55 01 15 6b 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 01[32]: 55 14 c6 16 01 1e 01 ff 00 18 01 1e 01 ff 00 18 01 1e 01 ff 00 18 ea 00 00 00 00 00 00 00 00 00
 81[32]: 55 01 16 6c 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
@@ -31,11 +32,15 @@ EP 01:
 Byte 0 always 0x55
 Byte 1 always 0x14
 Byte 2 always 0xc6
-Byte 3 looks like a counter, changing it breaks the command though
+Byte 3 looks like a counter, changing it breaks the command though (Probably due to checksum)
 Byte 4 always 01
 Byte 5 always 1e
 Byte 6 always 01
 Byte 7 can change
+Last non-zero byte is a checksum
+
+
+
 
 EP 81:
 81[32]: 55 01 15 6b 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
