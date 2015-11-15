@@ -11,6 +11,7 @@
 
 # Gather data
 input_file = open("usb.log","r")
+output_file = open("usb.log","a")
 
 endpoint_bins = {}# { "01" : [ [0x55,...], ...] }
 previous_byte_string_list = None
@@ -67,7 +68,8 @@ for line in input_file:
 
 # Parse data
 
-
+input_file.close()
+output_file.close()
 
 def main():
     pass

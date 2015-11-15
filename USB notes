@@ -57,3 +57,4 @@ HYPOTHESIS:
 	Protocol will start with a handshake
 	Commands to change colour of pads will follow
 	Colour values will consist of 3 sets of 3 byte RGB values. ex. [(0x00,0x00,0xff), (0x00,0x00,0xff), (0x00,0x00,0xff)]
+	Colour values will persist until new values are sent or device is powered off.
