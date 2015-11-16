@@ -40,6 +40,12 @@ Byte 7 can change
 Last non-zero byte is a checksum
 
 
+Checksum byte:
+	Last non-zero byte is a checksum
+	Checksum is not:
+		CRC-8 Maxim/Dallas Algorithm https://gist.githubusercontent.com/eaydin/768a200c5d68b9bc66e7/raw/b759cc066973b59f5af276311addb455ed8e7ef5/crc8dallas.py
+
+
 
 
 EP 81:
