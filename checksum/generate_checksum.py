@@ -39,10 +39,12 @@ print dev.write(1, [0x55, 0x0f, 0xb0, 0x01, 0x28, 0x63, 0x29, 0x20, 0x4c, 0x45, 
 
 def compute_checksum(byte_list):
     """Compute the checksum byte for the lego portal USB protocol"""
-    return calc(byte_list)
     checksum = 0
     for current_byte in byte_list:
         checksum = checksum ^ current_byte
+    print("checksum:"+repr(checksum))
+    remainder = checksum % 16
+    print("remainder:"+repr(remainder))
     return checksum
 
 

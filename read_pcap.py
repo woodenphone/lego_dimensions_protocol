@@ -8,12 +8,12 @@
 # Copyright:   (c) User 2015
 # Licence:     <your licence>
 #-------------------------------------------------------------------------------
-import dpkt
+import scapy.all
 import os
 
 capture_path = os.path.join("logs", "2015-11-15_turn_on_and_leave_unattended_at_start_screen.pcap")
-f = open(capture_path, "r")
-pcap = dpkt.pcap.Reader(f)
+a = scapy.rdpcap(capture_path)
+
 
 
 
