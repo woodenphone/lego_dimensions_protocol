@@ -51,6 +51,7 @@ def cycle_immediate_all():
         time.sleep(2)
     return
 
+
 def demo():
     """Show off cycle functions"""
     print "Running demo"
