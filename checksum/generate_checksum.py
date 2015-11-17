@@ -18,31 +18,42 @@ import time
 
 
 
-
-# find our device
-dev = usb.core.find(idVendor=0x0e6f)# 0x0e6f Logic3 (made lego dimensions portal hardware)
-
-# was it found?
-if dev is None:
-    raise ValueError('Device not found')
-
-# set the active configuration. With no arguments, the first
-# configuration will be the active one
-dev.set_configuration()
-
-
-print dev.write(1, [0x55, 0x0f, 0xb0, 0x01, 0x28, 0x63, 0x29, 0x20, 0x4c, 0x45, 0x47, 0x4f, 0x20, 0x32, 0x30, 0x31, 0x34, 0xf7, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00])# Startup
-
-
+##
+### find our device
+##dev = usb.core.find(idVendor=0x0e6f)# 0x0e6f Logic3 (made lego dimensions portal hardware)
+##
+### was it found?
+##if dev is None:
+##    raise ValueError('Device not found')
+##
+### set the active configuration. With no arguments, the first
+### configuration will be the active one
+##dev.set_configuration()
+##
+##
+##print dev.write(1, [0x55, 0x0f, 0xb0, 0x01, 0x28, 0x63, 0x29, 0x20, 0x4c, 0x45, 0x47, 0x4f, 0x20, 0x32, 0x30, 0x31, 0x34, 0xf7, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00])# Startup
 
 
 
-def compute_checksum(byte_list):
+
+
+def compute_checksum_add(byte_list):
     """Compute the checksum byte for the lego portal USB protocol"""
     checksum = 0
     for current_byte in byte_list:
-        checksum = checksum ^ current_byte
+        checksum = checksum + current_byte
     print("checksum:"+repr(checksum))
+    remainder = checksum % 16
+    print("remainder:"+repr(remainder))
+    return remainder
+
+
+def compute_checksum_bitwise_add(byte_list):
+    """Compute the checksum byte for the lego portal USB protocol"""
+    checksum = 255
+    for current_byte in byte_list:
+        checksum = checksum ^ current_byte
+        print("checksum:"+repr(checksum))
     remainder = checksum % 16
     print("remainder:"+repr(remainder))
     return checksum
@@ -68,17 +79,32 @@ def test_expected_checksums():
     ]
 
     for original_packet in packets:
-        command = original_packet[0:22]
         expected_checksum = original_packet[22]
-        generated_checksum = compute_checksum(byte_list=command)
-        current_packet = command+[generated_checksum]
-        # Pad to 32 bytes
-        while ( len(current_packet) < 32):
-            current_packet.append(0)
-        print("expected_checksum:"+repr(expected_checksum))
-        print("generated_checksum: "+repr(generated_checksum))
-        assert(expected_checksum == generated_checksum)
-        assert(current_packet == original_packet)
+        subsections = [
+            original_packet[0:22],
+            original_packet[1:22],
+            original_packet[2:22],
+            ]
+        for subsection in subsections:
+            # Run checksum algorithm
+            checksum_functions = [
+                compute_checksum_add,
+                compute_checksum_bitwise_add,
+                ]
+            for checksum_function in checksum_functions:
+                generated_checksum = checksum_function(byte_list=subsection)
+                current_packet = subsection+[generated_checksum]
+                # Pad to 32 bytes
+                while ( len(current_packet) < 32):
+                    current_packet.append(0)
+                print("expected_checksum:"+repr(expected_checksum))
+                print("generated_checksum: "+repr(generated_checksum))
+                # Test if it worked
+                if (expected_checksum == generated_checksum):
+                    print "Match!"
+                    assert(expected_checksum == generated_checksum)
+                    assert(current_packet == original_packet)
+                    assert(False)# We found it
     return
 
 
@@ -104,7 +130,12 @@ def generate_checksum_for_counter():
 
 
 def main():
-    test_expected_checksums()
+    packet = [0x55,0x14,0xc6,0x0e,0x01,0x1e,0x01,0xff,0x00,0x18,0x01,0x1e,0x01,0xff,0x00,0x18,0x01,0x1e,0x01,0xff,0x00,0x18,]
+    expected_checksum = 0xe2
+    generated_checksum = compute_checksum_bitwise_add(packet)
+    print("expected_checksum:"+repr(expected_checksum))
+    print("generated_checksum: "+repr(generated_checksum))
+
 
 if __name__ == '__main__':
     main()
