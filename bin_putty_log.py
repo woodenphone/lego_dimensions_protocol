@@ -49,10 +49,12 @@ with open(input_file_path, "r") as input_file:
         endpoint_number = line.split("[")[0]
         byte_strings = line.split(" ")[1:]
         command = byte_strings[1]
+        # Save raw
         output_file_name = endpoint_number+"_"+command+".txt"
         output_file_path = os.path.join(output_dir, output_file_name)
         with open(output_file_path, "a") as output_file:
             output_file.write(line)
+        # Save as expression
         expression = pythonify_packet(line[:-1])
         expression_output_file_name = endpoint_number+"_"+command+".py"
         expression_output_file_path = os.path.join(output_dir, expression_output_file_name)
