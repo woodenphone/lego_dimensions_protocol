@@ -34,7 +34,12 @@ import time
 ##print dev.write(1, [0x55, 0x0f, 0xb0, 0x01, 0x28, 0x63, 0x29, 0x20, 0x4c, 0x45, 0x47, 0x4f, 0x20, 0x32, 0x30, 0x31, 0x34, 0xf7, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00])# Startup
 
 
-
+def twos_comp(val, bits):
+    """compute the 2's compliment of int value val
+    http://stackoverflow.com/questions/1604464/twos-complement-in-python"""
+    if (val & (1 << (bits - 1))) != 0: # if sign bit is set e.g., 8bit: 128-255
+        val = val - (1 << bits)        # compute negative value
+    return val                         # return positive value as is
 
 
 def compute_checksum_add(byte_list):
@@ -42,9 +47,9 @@ def compute_checksum_add(byte_list):
     checksum = 0
     for current_byte in byte_list:
         checksum = checksum + current_byte
-    print("checksum:"+repr(checksum))
+    #print("checksum:"+repr(checksum))
     remainder = checksum % 16
-    print("remainder:"+repr(remainder))
+    #print("remainder:"+repr(remainder))
     return remainder
 
 
@@ -53,10 +58,39 @@ def compute_checksum_bitwise_add(byte_list):
     checksum = 255
     for current_byte in byte_list:
         checksum = checksum ^ current_byte
-        print("checksum:"+repr(checksum))
-    remainder = checksum % 16
-    print("remainder:"+repr(remainder))
+        #print("checksum:"+repr(checksum))
     return checksum
+
+def compute_checksum_overflow_add(byte_list):
+    """Compute the checksum byte for the lego portal USB protocol"""
+    checksum = 255
+    for current_byte in byte_list:
+        checksum = checksum + current_byte
+        if checksum > 255:
+            checksum = checksum - 255
+        #print("checksum:"+repr(checksum))
+    return checksum
+
+
+def compute_checksum_overflow_bitwise_add(byte_list):
+    """Compute the checksum byte for the lego portal USB protocol"""
+    checksum = 255
+    for current_byte in byte_list:
+        checksum = checksum ^ current_byte
+        if checksum > 255:
+            checksum = checksum - 255
+        #print("checksum:"+repr(checksum))
+    return checksum
+
+
+def test_xor_parity():
+    """Find out if xor parity is used"""
+    #        [0x55,0x14,0xc6,0x1a,0x01,0x1e,0x01,0xff,0x00,0x18,0x01,0x1e,0x01,0xff,0x00,0x18,0x01,0x1e,0x01,0xff,0x00,0x18,0xee,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00]
+    packet = [0x55,0x14,0xc6,0x1a,0x01,0x1e,0x01,0xff,0x00,0x18,0x01,0x1e,0x01,0xff,0x00,0x18,0x01,0x1e,0x01,0xff,0x00,0x18,]
+    result = 0
+    for word in packet:
+        result = result ^ word
+    print hex(result)
 
 
 def test_expected_checksums():
@@ -90,21 +124,28 @@ def test_expected_checksums():
             checksum_functions = [
                 compute_checksum_add,
                 compute_checksum_bitwise_add,
+                compute_checksum_overflow_add,
+                compute_checksum_overflow_bitwise_add,
                 ]
             for checksum_function in checksum_functions:
+                print("\n\n")
                 generated_checksum = checksum_function(byte_list=subsection)
                 current_packet = subsection+[generated_checksum]
                 # Pad to 32 bytes
                 while ( len(current_packet) < 32):
                     current_packet.append(0)
+                print("checksum_function:"+repr(checksum_function))
+                print("subsection:"+repr(subsection))
                 print("expected_checksum:"+repr(expected_checksum))
                 print("generated_checksum: "+repr(generated_checksum))
+                print("original_packet: "+repr(original_packet))
+                print("current_packet: "+repr(current_packet))
                 # Test if it worked
                 if (expected_checksum == generated_checksum):
                     print "Match!"
-                    assert(expected_checksum == generated_checksum)
-                    assert(current_packet == original_packet)
-                    assert(False)# We found it
+                    print repr(locals())
+                    #assert(current_packet == original_packet)
+                    #assert(False)# We found it
     return
 
 
@@ -130,11 +171,13 @@ def generate_checksum_for_counter():
 
 
 def main():
-    packet = [0x55,0x14,0xc6,0x0e,0x01,0x1e,0x01,0xff,0x00,0x18,0x01,0x1e,0x01,0xff,0x00,0x18,0x01,0x1e,0x01,0xff,0x00,0x18,]
-    expected_checksum = 0xe2
-    generated_checksum = compute_checksum_bitwise_add(packet)
-    print("expected_checksum:"+repr(expected_checksum))
-    print("generated_checksum: "+repr(generated_checksum))
+    test_xor_parity()
+    #test_expected_checksums()
+    #packet = [0x55,0x14,0xc6,0x0e,0x01,0x1e,0x01,0xff,0x00,0x18,0x01,0x1e,0x01,0xff,0x00,0x18,0x01,0x1e,0x01,0xff,0x00,0x18,]
+    #expected_checksum = 0xe2
+    #generated_checksum = compute_checksum_overflow_bitwise_add(packet[1:])
+    #print("expected_checksum:"+repr(expected_checksum))
+    #print("generated_checksum: "+repr(generated_checksum))
 
 
 if __name__ == '__main__':
