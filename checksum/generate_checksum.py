@@ -344,9 +344,8 @@ def pad_message(message):
 def convert_command_to_packet(command):
     assert(len(command) <= 31)
     checksum = generate_checksum_for_command(command)
-    packet = command+[checksum]
-    while len(packet) < 32:
-        packet.append(0x00)
+    message = command+[checksum]
+    packet = pad_message(message)
     return packet
 
 
