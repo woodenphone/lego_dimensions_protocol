@@ -49,9 +49,19 @@ def convert_to_byte_list(packet_line_string):
 
 
 input_file_path = os.path.join("logs", "2015-11-16_play_game_fo_a_while_putty.log")
-output_dir = os.path.join("binned_log")
-if not os.path.exists(output_dir):
-    os.makedirs(output_dir)
+#
+raw_output_dir = os.path.join("binned_log", "raw")
+if not os.path.exists(raw_output_dir):
+    os.makedirs(raw_output_dir)
+#
+lists_output_dir = os.path.join("binned_log", "lists")
+if not os.path.exists(lists_output_dir):
+    os.makedirs(lists_output_dir)
+#
+expressions_output_dir = os.path.join("binned_log", "expressions")
+if not os.path.exists(expressions_output_dir):
+    os.makedirs(expressions_output_dir)
+
 
 
 with open(input_file_path, "r") as input_file:
@@ -64,19 +74,19 @@ with open(input_file_path, "r") as input_file:
         command = "0x"+byte_strings[1]+"_0x"+byte_strings[2]
         # Save raw
         output_file_name = endpoint_number+"_"+command+".txt"
-        output_file_path = os.path.join(output_dir, output_file_name)
+        output_file_path = os.path.join(raw_output_dir, output_file_name)
         with open(output_file_path, "a") as output_file:
             output_file.write(line)
         # Save as expression
         expression = convert_to_expression(line[:-1])
         expression_output_file_name = endpoint_number+"_"+command+".py"
-        expression_output_file_path = os.path.join(output_dir, expression_output_file_name)
+        expression_output_file_path = os.path.join(expressions_output_dir, expression_output_file_name)
         with open(expression_output_file_path, "a") as expression_output_file:
             expression_output_file.write(expression+"\n")
         # Save as byte list
         bytelist = convert_to_byte_list(line[:-1])
         bytelist_output_file_name = endpoint_number+"_"+command+".bytelists"
-        bytelist_output_file_path = os.path.join(output_dir, bytelist_output_file_name)
+        bytelist_output_file_path = os.path.join(lists_output_dir, bytelist_output_file_name)
         with open(bytelist_output_file_path, "a") as bytelist_output_file:
             bytelist_output_file.write(bytelist+",\n")
 
