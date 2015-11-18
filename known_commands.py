@@ -41,7 +41,7 @@ print dev.write(1, [0x55, 0x0f, 0xb0, 0x01, 0x28, 0x63, 0x29, 0x20, 0x4c, 0x45, 
 # command byte 2
 # message counter, no noticed effect
 # args...
-# checksum, unknown algorithm
+# checksum, (simple addition of previous bytes with overflow at 255)
 # padding to 32 bytes
 
 
