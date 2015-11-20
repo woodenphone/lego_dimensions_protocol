@@ -1,24 +1,24 @@
-# 0x14 0xc6 Fade to value
+# 0x14 0xc6 - Fade pad(s) to value(s)
 # Byte: use
 # 00: Always 0x55
 # 01: Command
 # 02: command cont
 # 03: Message counter
-# 04: c:
+# 04: c:enable 0x00:disable, other:enable
 # 05: c:Transition time, 0x00 is immediate
-# 06: c:
+# 06: c:Pulse count, 0x00 does not change pad
 # 07: c:red
 # 08: c:green
 # 09: c:blue
-# 10: l:
+# 10: l:enable 0x00:disable, other:enable
 # 11: l:Transition time, 0x00 is immediate
-# 12: l:
+# 12: l:Pulse count, 0x00 does not change pad
 # 13: l:red
 # 14: l:green
 # 15: l:blue
-# 16: r:
+# 16: r:enable 0x00:disable, other:enable
 # 17: r:Transition time, 0x00 is immediate
-# 18: r:
+# 18: r:Pulse count, 0x00 does not change pad
 # 19: r:red
 # 20: r:green
 # 21: r:blue

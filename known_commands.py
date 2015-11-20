@@ -62,22 +62,7 @@ print dev.write(1, [0x55, 0x0f, 0xb0, 0x01, 0x28, 0x63, 0x29, 0x20, 0x4c, 0x45, 
 # Simple addition of previous bytes with overflow at 255
 
 
-# List of commands for endpoint 01:
-# 0x01 0xb3 -
-# 0x01 0x08 - Unknown
-# 0x04 0xd2 - unknown
-# 0x06 0xc0 - Immediately switch pad(s) to a single value
-# 0x08 0xc2 - Immediately change the colour of one or all pad(s), fade and flash available
-# 0x09 0xc3 - set 1 or all pad(s) to a colour with variable flash rates
-# 0x14 0xc6 - fade to value?
-# 0x17 0xc7 - Flash all 3 pads with individual colours and rates, either change to new or return to old based on pulse count
-# 0x0a 0xb1 -
-# 0x0a 0xd4 -
-# 0x0b 0x01 - unknown, no change to lights
-# 0x0b 0x02 - unknown, no change to lights
-# 0x0b 0x03 - unknown, no change to lights
-# 0x0e 0xc8 - Immediately switch to set of colours?
-# 0x0f 0xb0 - Startup?
+
 
 # Commands 0x01 0xXX - all tried have no visible effect, short/no arguments
 
