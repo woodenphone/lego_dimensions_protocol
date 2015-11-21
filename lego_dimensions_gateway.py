@@ -16,8 +16,8 @@
 # 01 0x08 0xc2 - fade_pad() - Immediately change the colour of one or all pad(s), fade and flash available
 # 01 0x09 0xc3 - flash_pad() - set 1 or all pad(s) to a colour with variable flash rates
 # 01 0x0e 0xc8 - switch_pads() - Immediately switch pad(s) to set of colours
-# 01 0x14 0xc6 - TODO - Fade pad(s) to value(s)
-# 01 0x17 0xc7 - TODO - Flash all 3 pads with individual colours and rates, either change to new or return to old based on pulse count
+# 01 0x14 0xc6 - fade_pads() - Fade pad(s) to value(s)
+# 01 0x17 0xc7 - flash_pads - Flash all 3 pads with individual colours and rates, either change to new or return to old based on pulse count
 
 
 import time
@@ -176,6 +176,54 @@ class Gateway():
         self.send_command(command)
         return
 
+    def fade_pads(self,
+        pad1_time, pad1_pulses, pad1_colour,
+        pad2_time, pad2_pulses, pad2_colour,
+        pad3_time, pad3_pulses, pad3_colour,
+        ):# TODO
+        """
+        Colour is represented by a tuple using the format:
+            (R, G, B)
+        Colour values must be from 0-255 (0x00-0xff)
+        Empty colour tuples will ignore that pad.
+        Ignored pads will continue whatever they were doing previously.
+        TODO investigate time values
+        TODO investigate count values
+        Abstraction for command: 0x14 0xc6
+
+        """
+        assert(len(colours) == 3)
+        command = [0x55, 0x17, 0xc7, 0x3e,
+        (len(pad1_colour) == 3), pad1_time, pad1_pulses, pad1_colour[0], pad1_colour[1], pad1_colour[2],# Center pad (1)
+        (len(pad2_colour) == 3), pad2_time, pad2_pulses, pad2_colour[0], pad2_colour[1], pad2_colour[2],# Left pad (2)
+        (len(pad3_colour) == 3), pad3_time, pad3_pulses, pad3_colour[0], pad3_colour[1], pad3_colour[2],# Right pad(3)
+        ]
+        self.send_command(command)
+        return
+
+
+    def flash_pads(self,
+        pad1_on_time, pad1_off_time, pad1_pulses, pad1_colour,
+        pad2_on_time, pad2_off_time, pad2_pulses, pad2_colour,
+        pad3_on_time, pad2_off_time, pad3_pulses, pad3_colour,
+        ):# TODO
+        """
+        Flash all 3 pads with individual colours and rates, either change to new or return to old based on pulse count.
+        Requires 3 tuples:
+            (Center),(Left),(Right)
+        Each using the format:
+            (R, G, B)
+        Empty colour tuples will ignore that pad.
+        Ignored pads will continue whatever they were doing previously.
+
+        On pulse length - 0x00 is almost impersceptible,  0xff is ~10 seconds
+        Off pulse length - 0x00 is almost impersceptible, 0xff is ~10 seconds
+        Number of flashes - odd value leaves pad in new colour, even leaves pad in old, except for 0x00, which changes to new. Values above 0xc6 dont stop.
+        Abstraction for command: 0x17 0xc7
+        """
+        command = [0x55, 0x17, 0xc7, 0x3e,]
+        self.send_command(command)
+        return
 
 
 def demo_switch_pads_skip(gateway):
