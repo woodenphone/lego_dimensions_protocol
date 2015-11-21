@@ -29,6 +29,8 @@ class Gateway():
     def __init__(self):
         # Initialise USB connection to the device
         self.dev = self._init_usb()
+        # Reset the state of the device to all off
+        self.blank_pads()
         return
 
     def _init_usb(self):
@@ -88,6 +90,19 @@ class Gateway():
         print("packet:"+repr(packet))
         self.dev.write(1, packet)
 
+    def blank_pads(self):
+        """
+        Clear the pads to all off.
+        """
+        self.switch_pad(
+            pad = 0, # All pads
+            red = 0,
+            green = 0,
+            blue = 0,
+            )
+        return
+
+
     def switch_pad(self,pad,red,green,blue):
         """
         Change the colour of one or all pad(s) immediately
@@ -113,17 +128,18 @@ class Gateway():
         self.send_command(command)
         return
 
-    def fade_pad(self, pad, speed, pulse_count, red, green, blue):# TODO
+    def fade_pad(self, pad, pulse_time, pulse_count, red, green, blue):
         """
         ... one or all pad(s) a given colour
         The pad(s) will either revert to old colour or stay on the new one depending on the pulse_count value TODO CHECK THIS IS TRUE
         Odd: keep new colour, Even: keep previous colour. Exception: 0x00 keeps new colour. TODO CHECK THIS IS TRUE
-        Pulse counts from 0xff will flash forever. TODO CHECK THIS IS TRUE
+        pulse_count values of 0x00 and above 0x199 will flash forever.
+        pulse_time starts fast at 0x01 and continues to 0xff which is very slow, 0x00 causes immediate change.
         Pad numbering: 0:All, 1:Center, 2:Left, 3:Right
         Colour values are 0-255, with 0 being off and 255 being maximum
         Abstraction for command: 0x08 0xc2
         """
-        command = []
+        command = [0x55, 0x08, 0xc2, 0x0f, pad, pulse_time, pulse_count, red, green, blue]
         self.send_command(command)
         return
 
@@ -136,23 +152,37 @@ def debug():
     # Test switch_pad()
     gateway.switch_pad(
         pad=0,
-        red=255,
+        red=0,
         green=255,
         blue=0,
         )
-    time.sleep(5)
+    time.sleep(10)
+    gateway.blank_pads()
+    time.sleep(1)
     # Test flash_pad()
     gateway.flash_pad(
         pad = 0,
         on_length = 10,
         off_length = 20,
         pulse_count = 100,
-        red = 0,
+        red = 255,
         green = 0,
         blue = 0
         )
     time.sleep(10)
+    gateway.blank_pads()
+    time.sleep(1)
     # Test fade_pad()
+    gateway.fade_pad(
+        pad = 1,
+        pulse_time = 10,
+        pulse_count = 10,
+        red = 255,
+        green = 0,
+        blue = 255
+        )
+    gateway.blank_pads()
+    time.sleep(1)
     return
 
 

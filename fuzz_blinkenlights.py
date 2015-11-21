@@ -777,9 +777,10 @@ def convert_command_to_packet(command):
     return packet
 
 
-def send_command(command):
+def send_command(command, silent=False):
     packet = convert_command_to_packet(command)
-    print("packet:"+repr(packet))
+    if not silent:
+        print("packet:"+repr(packet))
     dev.write(1, packet)
 
 
@@ -789,15 +790,15 @@ def fuzz_command():
     while counter < 255:
         counter += 1
         print("Turning pad off...")
-        send_command([0x55, 0x06, 0xc0, 0x02, 0x00, 0x00, 0x00, 0x00])
+        send_command([0x55, 0x06, 0xc0, 0x02, 0x00, 0x00, 0x00, 0x00], silent=True)
         time.sleep(1)
-        print("counter: "+repr(counter))
+        print("counter: "+repr(counter)+" hex: "+repr(hex(counter)))
         send_command([0x55, 0x08, 0xc2, 0x0f,
-            0x01, 0x01, counter, # Pad, speed, count
+            0x01, counter, 0x09, # Pad, speed, count
             0xff, 0x00, 0x00] # R G B
             )
         raw_input("Press return to start next value")
-        time.sleep(10)
+        #time.sleep(10)
         continue
     print("Done fuzzing")
     return
