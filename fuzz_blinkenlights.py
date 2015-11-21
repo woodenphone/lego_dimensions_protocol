@@ -810,24 +810,6 @@ def fuzz_command():
     return
 
 
-
-def generate_checksum_for_command(command):
-    """
-    Given a command (without checksum or trailing zeroes),
-    generate a checksum for it.
-    """
-    assert(len(command) <= 31)
-    # Add bytes, overflowing at 256
-    result = 0
-    for word in command:
-        result = result + word
-        if result >= 256:
-            result -= 256
-    return result
-
-
-
-
 def main():
     init_usb()
     #print dev.write(1, [0x55, 0x06, 0xc0, 0x02, 0x00, 0xff, 0xff, 0xff, 0x1a, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00])# Switch to blue
