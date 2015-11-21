@@ -176,43 +176,54 @@ class Gateway():
         self.send_command(command)
         return
 
-    def fade_pads(self,
-        pad1_time, pad1_pulses, pad1_colour,
-        pad2_time, pad2_pulses, pad2_colour,
-        pad3_time, pad3_pulses, pad3_colour,
-        ):# TODO
+    def fade_pads(self, *pads):# TODO get second opinion on arguments
         """
-        Colour is represented by a tuple using the format:
-            (R, G, B)
+        Fade pad(s) to value(s)
+        Each pad is represented by a tuple in the format:
+            (fade_time, pulse_count, (R,G,B) )
         Colour values must be from 0-255 (0x00-0xff)
         Empty colour tuples will ignore that pad.
-        Ignored pads will continue whatever they were doing previously.
         TODO investigate time values
         TODO investigate count values
         Abstraction for command: 0x14 0xc6
 
         """
-        assert(len(colours) == 3)
-        command = [0x55, 0x17, 0xc7, 0x3e,
-        (len(pad1_colour) == 3), pad1_time, pad1_pulses, pad1_colour[0], pad1_colour[1], pad1_colour[2],# Center pad (1)
-        (len(pad2_colour) == 3), pad2_time, pad2_pulses, pad2_colour[0], pad2_colour[1], pad2_colour[2],# Left pad (2)
-        (len(pad3_colour) == 3), pad3_time, pad3_pulses, pad3_colour[0], pad3_colour[1], pad3_colour[2],# Right pad(3)
-        ]
+        assert(len(pads) == 3)
+        command = [0x55, 0x14, 0xc6, 0x26,]
+        for pad in pads:
+            if len(pad) != 3:
+                # Disable command for this pad
+                enable = 0
+                fade_time = 0
+                pulse_count = 0
+                red, green, blue = 0, 0, 0
+            elif len(pad[2]) != 3:
+                # Disable command for this pad
+                enable = 0
+                fade_time = 0
+                pulse_count = 0
+                red, green, blue = 0, 0, 0
+            else:
+                # Enable pad for the command
+                enable = 1
+                colour = pad[2]
+                red, green, blue = colour[0], colour[1], colour[2]
+                fade_time = pad[0]
+                pulse_count = pad[1]
+            command += [enable, fade_time, pulse_count, red, green, blue]
+            continue
         self.send_command(command)
         return
 
 
-    def flash_pads(self,
-        pad1_on_time, pad1_off_time, pad1_pulses, pad1_colour,
-        pad2_on_time, pad2_off_time, pad2_pulses, pad2_colour,
-        pad3_on_time, pad2_off_time, pad3_pulses, pad3_colour,
-        ):# TODO
+    def flash_pads(self, *pads):# TODO get second opinion on arguments
         """
         Flash all 3 pads with individual colours and rates, either change to new or return to old based on pulse count.
-        Requires 3 tuples:
-            (Center),(Left),(Right)
-        Each using the format:
-            (R, G, B)
+        Each pad is represented by a tuple in the format:
+            (on_length, off_length, pulse_count, (R,G,B) )
+        Colour values must be from 0-255 (0x00-0xff)
+        Empty colour tuples will ignore that pad.
+        Ignored pads will continue whatever they were doing previously.
         Empty colour tuples will ignore that pad.
         Ignored pads will continue whatever they were doing previously.
 
@@ -221,9 +232,36 @@ class Gateway():
         Number of flashes - odd value leaves pad in new colour, even leaves pad in old, except for 0x00, which changes to new. Values above 0xc6 dont stop.
         Abstraction for command: 0x17 0xc7
         """
+        assert(len(pads) == 3)
         command = [0x55, 0x17, 0xc7, 0x3e,]
+        for pad in pads:
+            if len(pad) != 4:
+                # Disable command for this pad
+                enable = 0
+                on_length = 0
+                off_length = 0
+                pulse_count = 0
+                red, green, blue = 0, 0, 0
+            elif len(pad[3]) != 3:
+                # Disable command for this pad
+                enable = 0
+                on_length = 0
+                off_length = 0
+                pulse_count = 0
+                red, green, blue = 0, 0, 0
+            else:
+                # Enable pad for the command
+                enable = 1
+                colour = pad[3]
+                red, green, blue = colour[0], colour[1], colour[2]
+                on_length = pad[0]
+                off_length = pad[1]
+                pulse_count = pad[2]
+            command += [enable, on_length, off_length, pulse_count, red, green, blue]
+            continue
         self.send_command(command)
         return
+
 
 
 def demo_switch_pads_skip(gateway):
@@ -249,6 +287,44 @@ def demo_switch_pads_skip(gateway):
     return
 
 
+def test_flash_pads(gateway):
+    # test flash_pads()
+    gateway.flash_pads(# 3 changing pads
+        (5, 10, 15, (255,0,0)),# (on_length, off_length, pulse_count, (R,G,B) )
+        (20, 25, 30, (0,255,0)),# (on_length, off_length, pulse_count, (R,G,B) )
+        (35, 40, 45, (0,0,255)),# (on_length, off_length, pulse_count, (R,G,B) )
+        )
+    pause_between_tests(gateway)
+    gateway.flash_pads(# Two ignored pads
+        (5, 10, 15, ()),# On, off, count, (R,G,B)
+        (),# On, off, count, (R,G,B)
+        (5, 40, 10, (255,0,255)),# On, off, count, (R,G,B)
+        )
+    return
+
+
+def test_fade_pads(gateway):
+    # test fade_pads()
+    gateway.fade_pads(# 3 changing pads
+        (10, 20, (255, 0, 0)),# (fade_time, pulse_count, (R,G,B) )
+        (20, 10, (0, 255, 0)),# (fade_time, pulse_count, (R,G,B) )
+        (15, 15, (0, 0, 255)),# (fade_time, pulse_count, (R,G,B) )
+        )
+    pause_between_tests(gateway)
+    gateway.fade_pads(# Two ignored pads
+        (),# (fade_time, pulse_count, (R,G,B) )
+        (20, 10, ()),# (fade_time, pulse_count, (R,G,B) )
+        (15, 15, (0, 0, 255)),# (fade_time, pulse_count, (R,G,B) )
+        )
+    return
+
+
+def pause_between_tests(gateway):
+    time.sleep(10)
+    gateway.blank_pads()
+    time.sleep(1)
+
+
 def debug():
     """
     For testing and debugging and coding and stuff
@@ -256,15 +332,20 @@ def debug():
     # Get gateway object
     gateway = Gateway(verbose=True)
 
+    # Test functions for library
+    #test_flash_pads(gateway)
+    #pause_between_tests(gateway)
+
+    test_fade_pads(gateway)
+    return
+
     # Test switch_pad()
     gateway.switch_pad(
         pad=0,
         colour = (0, 255, 0)# RGB
         )
 
-    time.sleep(10)
-    gateway.blank_pads()
-    time.sleep(1)
+    pause_between_tests(gateway)
 
     # Test flash_pad()
     gateway.flash_pad(
@@ -275,9 +356,7 @@ def debug():
         colour = (255,0,0)# RGB
         )
 
-    time.sleep(10)
-    gateway.blank_pads()
-    time.sleep(1)
+    pause_between_tests(gateway)
 
     # Test fade_pad()
     gateway.fade_pad(
@@ -287,9 +366,7 @@ def debug():
         colour = (255, 0, 255)# RGB
         )
 
-    time.sleep(10)
-    gateway.blank_pads()
-    time.sleep(1)
+    pause_between_tests(gateway)
 
     # test switch_pads()
     gateway.switch_pads(
@@ -298,8 +375,8 @@ def debug():
         (),# R:skip
         )
 
-    gateway.blank_pads()
-    time.sleep(1)
+    pause_between_tests(gateway)
+
     demo_switch_pads_skip(gateway)
     return
 
