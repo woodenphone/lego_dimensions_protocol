@@ -103,11 +103,15 @@ def send_text(gateway, text):
         send_character(gateway, character)
     return
 
+def demo():
+    gateway = library.Gateway()
+    while True:
+        text = "Lego Dimensions gateway morse code demonstration     "
+        send_text(gateway, text)
 
 def main():
-    text = "Lego Dimensions gateway morse code demonstration"
-    gateway = library.Gateway()
-    send_text(gateway, text)
+    demo()
+
 
 if __name__ == '__main__':
     main()
