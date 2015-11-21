@@ -97,25 +97,25 @@ class Gateway():
         """
         self.switch_pad(
             pad = 0, # All pads
-            red = 0,
-            green = 0,
-            blue = 0,
+            colour=(0,0,0)# RGB
             )
         return
 
 
-    def switch_pad(self,pad,red,green,blue):
+    def switch_pad(self, pad, colour):
         """
         Change the colour of one or all pad(s) immediately
         Pad numbering: 0:All, 1:Center, 2:Left, 3:Right
         Colour values are 0-255, with 0 being off and 255 being maximum
+        Colour should be a tuple of 0-255 values in the format (red, green,blue)
         Abstraction for command: 0x06 0xc0
         """
+        red, green, blue = colour[0], colour[1], colour[2]
         command = [0x55, 0x06, 0xc0, 0x02, pad, red, green, blue,]
         self.send_command(command)
         return
 
-    def flash_pad(self, pad, on_length, off_length, pulse_count, red, green, blue):
+    def flash_pad(self, pad, on_length, off_length, pulse_count, colour):
         """
         Flash one or all pad(s) a given colour
         The pad(s) will either revert to old colour or stay on the new one depending on the pulse_count value
@@ -123,13 +123,15 @@ class Gateway():
         Pulse counts from 0xff will flash forever.
         Pad numbering: 0:All, 1:Center, 2:Left, 3:Right
         Colour values are 0-255, with 0 being off and 255 being maximum
+        Colour should be a tuple of 0-255 values in the format (red, green,blue)
         Abstraction for command: 0x09 0xc3
         """
+        red, green, blue = colour[0], colour[1], colour[2]
         command = [0x55, 0x09, 0xc3, 0x1f, pad, on_length, off_length, pulse_count, red, green, blue]
         self.send_command(command)
         return
 
-    def fade_pad(self, pad, pulse_time, pulse_count, red, green, blue):
+    def fade_pad(self, pad, pulse_time, pulse_count, colour):
         """
         ... one or all pad(s) a given colour
         The pad(s) will either revert to old colour or stay on the new one depending on the pulse_count value
@@ -138,8 +140,10 @@ class Gateway():
         pulse_time starts fast at 0x01 and continues to 0xff which is very slow, 0x00 causes immediate change.
         Pad numbering: 0:All, 1:Center, 2:Left, 3:Right
         Colour values are 0-255, with 0 being off and 255 being maximum
+        Colour should be a tuple of 0-255 values in the format (red, green,blue)
         Abstraction for command: 0x08 0xc2
         """
+        red, green, blue = colour[0], colour[1], colour[2]
         command = [0x55, 0x08, 0xc2, 0x0f, pad, pulse_time, pulse_count, red, green, blue]
         self.send_command(command)
         return
@@ -153,9 +157,7 @@ def debug():
     # Test switch_pad()
     gateway.switch_pad(
         pad=0,
-        red=0,
-        green=255,
-        blue=0,
+        colour = (0, 255, 0)# RGB
         )
     time.sleep(10)
     gateway.blank_pads()
@@ -166,9 +168,7 @@ def debug():
         on_length = 10,
         off_length = 20,
         pulse_count = 100,
-        red = 255,
-        green = 0,
-        blue = 0
+        colour = (255,0,0)# RGB
         )
     time.sleep(10)
     gateway.blank_pads()
@@ -178,9 +178,7 @@ def debug():
         pad = 1,
         pulse_time = 10,
         pulse_count = 10,
-        red = 255,
-        green = 0,
-        blue = 255
+        colour = (255, 0, 255)# RGB
         )
     gateway.blank_pads()
     time.sleep(1)

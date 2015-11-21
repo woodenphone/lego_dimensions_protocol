@@ -20,6 +20,7 @@ SPACE = TIME_UNIT*3
 
 # codes transcribed from picture on http://thelivingpearl.com/2013/01/08/morse-code-and-dictionaries-in-python-with-sound/
 MORSE_CODE_TABLE = {
+    # Letters
     "a":".-",
     "b":"-...",
     "c":"-.-.",
@@ -46,7 +47,7 @@ MORSE_CODE_TABLE = {
     "x":"-..-",
     "y":"-.--",
     "z":"--..",
-
+    # Digits
     "0":"-----",
     "1":".----",
     "2":"..---",
@@ -74,28 +75,23 @@ def send_character(gateway, character):
             if symbol == ".":
                 gateway.switch_pad(
                     pad = 0,
-                    red = 255,
-                    green = 0,
-                    blue = 0
+                    colour = (255, 0, 0)# RGB
                     )
                 time.sleep(DOT)
             elif symbol == "-":
                 gateway.switch_pad(
                     pad = 0,
-                    red = 0,
-                    green = 0,
-                    blue = 255
+                    colour = (0, 0, 255)# RGB
                     )
                 time.sleep(DASH)
             # Turn pad back off
             gateway.switch_pad(
                 pad = 0,
-                red = 0,
-                green = 0,
-                blue = 0
+                colour = (0, 0, 0)# RGB
                 )
             time.sleep(TIME_UNIT)
     return
+
 
 def send_text(gateway, text):
     clean_text = re.sub("[^a-z0-9 ]","", text.lower())
@@ -103,11 +99,13 @@ def send_text(gateway, text):
         send_character(gateway, character)
     return
 
+
 def demo():
     gateway = lego_dimensions_gateway.Gateway()
     while True:
         text = "Lego Dimensions gateway morse code demonstration     "
         send_text(gateway, text)
+
 
 def main():
     demo()
