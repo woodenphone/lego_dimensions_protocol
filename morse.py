@@ -101,7 +101,7 @@ def send_text(gateway, text):
 
 
 def demo():
-    gateway = lego_dimensions_gateway.Gateway()
+    gateway = lego_dimensions_gateway.Gateway(verbose=True)
     while True:
         text = "Lego Dimensions gateway morse code demonstration     "
         send_text(gateway, text)
