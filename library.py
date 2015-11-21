@@ -151,7 +151,9 @@ def debug():
         green = 0,
         blue = 0
         )
-    # Test fade_pads(
+    time.sleep(10)
+    # Test fade_pad()
+    return
 
 
 def main():

@@ -5,8 +5,8 @@
 # 2: 0xc2
 # 3: Message counter
 # 4: Pad all=0 c=1 l=2 r=3
-# 5: ?change speed - needs more investigation
-# 6: ?flash rate/count - fuzz to investigate?
+# 5: Pulse time - needs more investigation
+# 6: Pulse count - 0x00 is forever, odd leaves on new colour, even leaves on old colour
 # 8: green
 # 9: blue
 # 10: Checksum
