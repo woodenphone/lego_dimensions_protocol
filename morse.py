@@ -9,7 +9,7 @@
 # Licence:     <your licence>
 #-------------------------------------------------------------------------------
 import time
-import library
+import lego_dimensions_gateway
 import re
 
 
@@ -104,7 +104,7 @@ def send_text(gateway, text):
     return
 
 def demo():
-    gateway = library.Gateway()
+    gateway = lego_dimensions_gateway.Gateway()
     while True:
         text = "Lego Dimensions gateway morse code demonstration     "
         send_text(gateway, text)
