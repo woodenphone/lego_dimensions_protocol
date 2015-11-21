@@ -12,12 +12,12 @@
 
 # Command to function mapping:
 # EP Cmd1 Cmd2 - func_name() - Description
-# 01 0x06 0xc0 - switch_pad() - Immediately switch pad(s) to a single value
-# 01 0x08 0xc2 - Immediately change the colour of one or all pad(s), fade and flash available
+# 01 0x06 0xc0 - switch_pad() - Immediately switch one or all pad(s) to a single value
+# 01 0x08 0xc2 - fade_pad() - Immediately change the colour of one or all pad(s), fade and flash available
 # 01 0x09 0xc3 - flash_pad() -set 1 or all pad(s) to a colour with variable flash rates
-# 01 0x0e 0xc8 - Immediately switch pad(s) to set of colours
-# 01 0x14 0xc6 - Fade pad(s) to value(s)
-# 01 0x17 0xc7 - Flash all 3 pads with individual colours and rates, either change to new or return to old based on pulse count
+# 01 0x0e 0xc8 - TODO - Immediately switch pad(s) to set of colours
+# 01 0x14 0xc6 - TODO -Fade pad(s) to value(s)
+# 01 0x17 0xc7 - TODO -Flash all 3 pads with individual colours and rates, either change to new or return to old based on pulse count
 
 
 
@@ -29,7 +29,7 @@ class Gateway():
     def __init__(self):
         # Initialise USB connection to the device
         self.dev = self._init_usb()
-        # Reset the state of the device to all off
+        # Reset the state of the device to all pads off
         self.blank_pads()
         return
 
@@ -60,7 +60,7 @@ class Gateway():
         Given a command (without checksum or trailing zeroes),
         generate a checksum for it.
         """
-        assert(len(command) <= 31)
+        assert(len(command) <= 31)# One byte must be left for the checksum
         # Add bytes, overflowing at 256
         result = 0
         for word in command:
@@ -71,14 +71,14 @@ class Gateway():
 
     def pad_message(self,message):
         """Pad a message to 32 bytes"""
-        assert(len(message) <= 32)
+        assert(len(message) <= 32)# Messages cannot be longer than 32 bytes
         while(len(message) < 32):
             message.append(0x00)
         return message
 
     def convert_command_to_packet(self,command):
         """Take a command and add a checksum and padding"""
-        assert(len(command) <= 31)
+        assert(len(command) <= 31)# One byte must be left for the checksum
         checksum = self.generate_checksum_for_command(command)
         message = command+[checksum]
         packet = self.pad_message(message)
@@ -86,6 +86,7 @@ class Gateway():
 
     def send_command(self,command):
         """Take the command, add checksum and padding, then send it"""
+        assert(len(command) <= 31)# One byte must be left for the checksum
         packet = self.convert_command_to_packet(command)
         print("packet:"+repr(packet))
         self.dev.write(1, packet)
@@ -131,8 +132,8 @@ class Gateway():
     def fade_pad(self, pad, pulse_time, pulse_count, red, green, blue):
         """
         ... one or all pad(s) a given colour
-        The pad(s) will either revert to old colour or stay on the new one depending on the pulse_count value TODO CHECK THIS IS TRUE
-        Odd: keep new colour, Even: keep previous colour. Exception: 0x00 keeps new colour. TODO CHECK THIS IS TRUE
+        The pad(s) will either revert to old colour or stay on the new one depending on the pulse_count value
+        Odd: keep new colour, Even: keep previous colour. Exception: 0x00 keeps new colour.
         pulse_count values of 0x00 and above 0x199 will flash forever.
         pulse_time starts fast at 0x01 and continues to 0xff which is very slow, 0x00 causes immediate change.
         Pad numbering: 0:All, 1:Center, 2:Left, 3:Right
