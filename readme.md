@@ -2,6 +2,7 @@ This project is currently focused on working out the communications protocol use
 The LED control commands appear to be deciphered.
 A python library for controling the gateway device's lights is provided. (lego_dimensions_gateway.py)
 
+The Xbox variant of the portal is not supported.
 
 Windows installation:
 Make sure the latest python 2.x is installed.
