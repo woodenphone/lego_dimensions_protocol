@@ -5,12 +5,19 @@ Card UID: 04 9A 74 6A 0B 40 80
 (This is one of the four tags used in the 2015-11-16 play session)
 
 
+Portal device appears to only care about the UID of a tag, meaning homebrew tags are possible.
+I suspect all the authentication is in the console where security, debugging, and patching are easy for the game devs.
+Is there a way to read all the data from a tag? - Possible use as generic NFC card/tag reader?
+Are there size limits if there is such a command?
+
+
+Packet structure:
 #0x56# 00: Magic number, always 0x56
 #0x0b# 01: ?
-#0x02# 02: Pad number? (known values: 0x01, 0x02, 0x03) - Confirm by sniffing
+#0x02# 02: Pad number? (known values: c:0x01, l:0x02, r:0x03)
 #0x00# 03: (known values: 0x00) - Confirm by sniffing
-#0x00# 04: (known values: 0x00, 0x02) ?previous pad number? - Confirm by sniffing
-#0x00# 05: Tag placed/removed? (known values: 0x00, 0x01) - Confirm by sniffing
+#0x00# 04: (known values: 0x00, 0x02, 0x08) ?previous pad number? ?tag type?- Confirm by sniffing
+#0x00# 05: Tag placed/removed? (known values: placed:0x00, removed:0x01) - Confirm by sniffing
 #0x04# 06: NFC UID 0
 #0x9a# 07: NFC UID 1
 #0x74# 08: NFC UID 2
