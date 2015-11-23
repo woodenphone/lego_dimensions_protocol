@@ -39,19 +39,88 @@ def hex_repr(bytelist):
     return output[:-2]
 
 
-def watch_pads():
+
+def generate_checksum_for_command(command):
+    """
+    Given a command (without checksum or trailing zeroes),
+    generate a checksum for it.
+    """
+    assert(len(command) <= 31)
+    # Add bytes, overflowing at 256
+    result = 0
+    for word in command:
+        result = result + word
+        if result >= 256:
+            result -= 256
+    return result
+
+
+def pad_message(message):
+    """Pad a message to 32 bytes"""
+    assert(len(message) <= 32)
+    while(len(message) < 32):
+        message.append(0x00)
+    return message
+
+
+def convert_command_to_packet(command):
+    assert(len(command) <= 31)
+    checksum = generate_checksum_for_command(command)
+    message = command+[checksum]
+    packet = pad_message(message)
+    return packet
+
+
+def send_command(command, silent=False):
+    packet = convert_command_to_packet(command)
+    if not silent:
+        print("packet:"+repr(packet))
+    dev.write(1, packet)
+
+
+
+
+
+
+def follow_tag():
+    """
+    Light up the pad that most recently had a tag placed on it
+    """
+    red, green, blue = (0xff,0x00,0xff)
     while True:
         try:
             inwards_packet = dev.read(0x81,32, timeout=100)
+            print("inwards_packet:"+repr(inwards_packet))
             bytelist = list(inwards_packet)
-            print("inwards_packet:"+hex_repr(bytelist))
+            print("bytelist:"+hex_repr(bytelist))
+
+            if not bytelist:# We need a packet
+                continue
+            if bytelist[0] != 0x56:# Only listen to NFC packets
+                continue
+
+            pad_num = bytelist[2]
+            tag_id = bytelist[6:12]
+            removed = bool(bytelist[5])# Was the tag removed, if false it was added
+
+            if not removed:
+                # Blank pads
+                send_command(
+                    [0x55, 0x06, 0xc0, 0x02, 0, 0, 0, 0,],
+                    silent=False
+                    )
+                # Set pad to colour
+                send_command(
+                    [0x55, 0x06, 0xc0, 0x02, pad_num, red, green, blue,],
+                    silent=False
+                    )
         except usb.USBError, err:
             pass
 
 
 def main():
     init_usb()
-    watch_pads()
+    follow_tag()
     return
 
 if __name__ == '__main__':
