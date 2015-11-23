@@ -12,6 +12,7 @@ import usb
 import usb.core
 import usb.util
 import time
+import threading
 
 def init_usb():
     global dev
@@ -76,10 +77,6 @@ def send_command(command, silent=False):
     if not silent:
         print("packet:"+repr(packet))
     dev.write(1, packet)
-
-
-
-
 
 
 def follow_tag():
