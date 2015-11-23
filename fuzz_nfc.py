@@ -8,7 +8,7 @@
 # Copyright:   (c) User 2015
 # Licence:     <your licence>
 #-------------------------------------------------------------------------------
-
+import usb
 import usb.core
 import usb.util
 import time
@@ -35,7 +35,8 @@ def init_usb():
 
 
 def main():
-    init_usb()
+    #init_usb()
+    return
 
 if __name__ == '__main__':
     main()

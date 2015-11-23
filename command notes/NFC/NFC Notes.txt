@@ -7,11 +7,17 @@ Card UID: 04 9A 74 6A 0B 40 80
 
 Portal device appears to only care about the UID of a tag, meaning homebrew tags are possible.
 I suspect all the authentication is in the console where security, debugging, and patching are easy for the game devs.
+(If they did it right, with unique tags and a lookup-table at their office to verify no cloning took place before content gets downloadewd for the expansion pack.)
+(I expect tags are merely holding a product key similar to what steam uses.)
+(Verify if the full tag is read on first read to see if we can use the same function to read tags)
 Is there a way to read all the data from a tag? - Possible use as generic NFC card/tag reader?
 Are there size limits if there is such a command?
 
 
+
+
 Packet structure:
+Endpoint 81, 32 bytes long packet
 #0x56# 00: Magic number, always 0x56
 #0x0b# 01: ?
 #0x02# 02: Pad number? (known values: c:0x01, l:0x02, r:0x03)
