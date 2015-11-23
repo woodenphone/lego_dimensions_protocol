@@ -118,6 +118,20 @@ def follow_tag():
             pass
 
 
+
+
+
+
+def watch_returned():
+    """Send a command on endpoint 01 and watch endpoint 81 to see if anything happens"""
+    commands = [
+
+        ]
+    for command in commands:
+        print("command: "+hex_repr(command))
+        dev.write(1, command)
+        time.sleep(2)
+
 def main():
     init_usb()
     follow_tag()

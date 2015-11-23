@@ -15,11 +15,11 @@ import os
 #
 input_file_path = os.path.join("logs", "2015-11-16_play_game_fo_a_while_putty.log")
 #
-lists_output_dir = os.path.join("binned_log", "nfc", "lists")
+lists_output_dir = os.path.join("binned_log", "1btye_cmds", "lists")
 if not os.path.exists(lists_output_dir):
     os.makedirs(lists_output_dir)
 #
-raw_output_dir = os.path.join("binned_log", "nfc", "raw")
+raw_output_dir = os.path.join("binned_log", "1btye_cmds", "raw")
 if not os.path.exists(raw_output_dir):
     os.makedirs(raw_output_dir)
 #
@@ -49,7 +49,7 @@ def convert_to_byte_list(packet_line_string):
 
 with open(input_file_path, "r") as input_file:
     for line in input_file:
-        if "81[32]:" not in line:# All USB endpoints for the device take 32-byte packets
+        if "[32]:" not in line:# All USB endpoints for the device take 32-byte packets
             continue
         #print(line)
         #81[32]: 55 01 15 6b 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
