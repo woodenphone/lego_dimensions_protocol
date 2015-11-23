@@ -15,11 +15,11 @@ import os
 #
 input_file_path = os.path.join("logs", "2015-11-16_play_game_fo_a_while_putty.log")
 #
-lists_output_dir = os.path.join("binned_log", "1btye_cmds", "lists")
+lists_output_dir = os.path.join("binned_log", "by_length_byte", "lists")
 if not os.path.exists(lists_output_dir):
     os.makedirs(lists_output_dir)
 #
-raw_output_dir = os.path.join("binned_log", "1btye_cmds", "raw")
+raw_output_dir = os.path.join("binned_log", "by_length_byte", "raw")
 if not os.path.exists(raw_output_dir):
     os.makedirs(raw_output_dir)
 #
@@ -55,15 +55,15 @@ with open(input_file_path, "r") as input_file:
         #81[32]: 55 01 15 6b 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
         endpoint_number = line.split("[")[0]
         byte_strings = line.split(" ")[1:]
-        command = "0x"+byte_strings[2] # We now think byte 2 is the command
+        length_byte = "0x"+byte_strings[1]
         # Save raw
-        output_file_name = endpoint_number+"_"+command+".txt"
+        output_file_name = endpoint_number+"_"+length_byte+".txt"
         output_file_path = os.path.join(raw_output_dir, output_file_name)
         with open(output_file_path, "a") as output_file:
             output_file.write(line)
         # Save as byte list
         bytelist = convert_to_byte_list(line[:-1])
-        bytelist_output_file_name = endpoint_number+"_"+command+".bytelists"
+        bytelist_output_file_name = endpoint_number+"_"+length_byte+".bytelists"
         bytelist_output_file_path = os.path.join(lists_output_dir, bytelist_output_file_name)
         with open(bytelist_output_file_path, "a") as bytelist_output_file:
             bytelist_output_file.write(bytelist+",\n")
