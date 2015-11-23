@@ -32,10 +32,26 @@ def init_usb():
     return dev
 
 
+def hex_repr(bytelist):
+    output = ""
+    for value in bytelist:
+        output += str(hex(value))+", "
+    return output[:-2]
+
+
+def watch_pads():
+    while True:
+        try:
+            inwards_packet = dev.read(0x81,32, timeout=100)
+            bytelist = list(inwards_packet)
+            print("inwards_packet:"+hex_repr(bytelist))
+        except usb.USBError, err:
+            pass
 
 
 def main():
-    #init_usb()
+    init_usb()
+    watch_pads()
     return
 
 if __name__ == '__main__':
