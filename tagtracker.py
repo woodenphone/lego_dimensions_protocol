@@ -15,9 +15,10 @@ import usb.util
 import time
 import threading
 
+import lego_dimensions_gateway
 
 
-class TagTracker():
+class TagTracker(lego_dimensions_gateway.Gateway):
     """
     Keep track of where pads are on the pad
     """
@@ -133,18 +134,31 @@ class TagTracker():
 
 def watch_pads():
     """Demo, tracks tag locations and prints them"""
-    tracker = TagTracker()
+    tag_colours = {
+        "4311985024672":(0xff,0xff,0xff)# Ghost on homebrew white 4x4 rounded plate tag
+        }
+    tracker = TagTracker(verbose=True)
     while True:
-        time.sleep(0.5)
-        tags = tracker.list_tags()
-        if tags:
+        time.sleep(0.2)
+        tag_ids = tracker.list_tags()
+        if tag_ids:
             print("")# Seperator between text blocks
-        for tag in tags:
-            tag_location = tracker.locate_tag(tag)
+        tracker.blank_pads()
+        for tag_id in tag_ids:
+            tag_location = tracker.locate_tag(tag_id)
             if tag_location == "removed":
-                print("tag:"+repr(tag)+" has been removed from the gateway")
+                print("tag:"+repr(tag_id)+" has been removed from the gateway")
             else:
-                print("tag:"+repr(tag)+" is located on pad "+repr(tag_location))
+                print("tag:"+repr(tag_id)+" is located on pad "+repr(tag_location))
+                try:
+                    tag_colour = tag_colours[tag_id]
+                    tracker.switch_pad(
+                        pad=tag_location,
+                        colour=tag_colour
+                        )
+                except KeyError:
+                    pass
+
     return
 
 
