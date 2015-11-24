@@ -1,4 +1,4 @@
-# 0x17 0xc7 - Flash all 3 pads with individual colours and rates, either change to new or return to old based on pulse count
+# 0xc7 - Flash all 3 pads with individual colours and rates, either change to new or return to old based on pulse count
 # Byte: use
 # 00: Always 0x55
 # 01: 0x17 Payload size == 23

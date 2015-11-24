@@ -1,8 +1,8 @@
-# 0x08 0xc2 - Immediately change the colour of one or all pad(s), fade and flash available
+# 0xc2 - Immediately change the colour of one or all pad(s), fade and flash available
 # Byte: use
 # 0: Always 0x55
 # 1: 0x08 Payload size == 8
-# 2: 0xc2
+# 2: 0xc2 Command
 # 3: Message counter
 # 4: Pad all=0 c=1 l=2 r=3
 # 5: Pulse time - needs more investigation

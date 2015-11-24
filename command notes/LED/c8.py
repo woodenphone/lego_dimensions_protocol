@@ -1,4 +1,4 @@
-# 0x0e 0xc8 Immediately switch pad(s) to set of colours
+# 0xc8 Immediately switch pad(s) to set of colours
 # Byte: use
 # 00: Always 0x55
 # 01: 0x0e Payload size == 14

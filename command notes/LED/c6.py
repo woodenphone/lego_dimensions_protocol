@@ -1,4 +1,4 @@
-# 0x14 0xc6 - Fade pad(s) to value(s)
+# 0xc6 - Fade pad(s) to value(s)
 # Byte: use
 # 00: Always 0x55
 # 01: Payload size == 20

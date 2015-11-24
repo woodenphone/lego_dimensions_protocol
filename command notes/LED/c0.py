@@ -1,7 +1,7 @@
-# 0x06 0xc0 - Immediately switch pad(s) to a value
+# 0xc0 - Immediately switch pad(s) to a value
 # Byte: use
 # 0: Always 0x55
-# 1: Command
+# 1: Payload size
 # 2: command cont
 # 3: Message counter
 # 4: Pad to change 0=all, 1=center, 2=left, 3=right,
@@ -26,7 +26,7 @@ dev.write(1, [0x55, 0x06, 0xc0, 0x02, 0x00, 0x00, 0x00, 0x00, 29, 0x00, 0x00, 0x
 # 0x06 0xc0 ?Change one pad?
 # Byte: use
 # 0: Always 0x55
-# 1: 0x06 cmd
+# 1: 0x06 Payload size == 6
 # 2: 0xc0 cmd
 # 3: Message counter
 # 4: 0x0, 0x1, 0x2, 0x3

@@ -1,10 +1,10 @@
-# 0x09 0xc3 - set 1 or all pad(s) to a colour with variable flash rates
+# 0xc3 - set 1 or all pad(s) to a colour with variable flash rates
 # Flashes between old and new colour
 # Does not appear to synchronise flashes
 # Byte: use
 # 00: Always 0x55
-# 01: 0x09
-# 02: 0xc3
+# 01: 0x09 Payload size == 9
+# 02: 0xc3 Command
 # 03: Message counter?
 # 04: pad 0:all, 1:center, 2:left 3:right
 # 05: On pulse length, higher is longer
