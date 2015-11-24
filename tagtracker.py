@@ -133,7 +133,8 @@ class TagTracker(lego_dimensions_gateway.Gateway):
 
 
 def watch_pads():
-    """Demo, tracks tag locations and prints them"""
+    """Demo, tracks tag locations and prints them.
+    If tag is known it also lights the pad up."""
     tag_colours = {
         "4311985024672":(0xff,0xff,0xff)# Ghost on homebrew white 4x4 rounded plate tag
         }
