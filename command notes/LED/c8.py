@@ -1,8 +1,8 @@
 # 0x0e 0xc8 Immediately switch pad(s) to set of colours
 # Byte: use
 # 00: Always 0x55
-# 01: 0x0e cmd
-# 02: 0xc8 cmd
+# 01: 0x0e Payload size == 14
+# 02: 0xc8 Command
 # 03 Message counter
 # 04: c:enable - 0x00 disables the command for this pad, other values enable
 # 05: c:red

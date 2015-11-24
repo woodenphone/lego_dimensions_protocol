@@ -11,13 +11,13 @@
 
 
 # Command to function mapping:
-# EP Cmd1 Cmd2 - func_name() - Description
-# 01 0x06 0xc0 - switch_pad() - Immediately switch one or all pad(s) to a single value
-# 01 0x08 0xc2 - fade_pad() - Immediately change the colour of one or all pad(s), fade and flash available
-# 01 0x09 0xc3 - flash_pad() - set 1 or all pad(s) to a colour with variable flash rates
-# 01 0x0e 0xc8 - switch_pads() - Immediately switch pad(s) to set of colours
-# 01 0x14 0xc6 - fade_pads() - Fade pad(s) to value(s)
-# 01 0x17 0xc7 - flash_pads - Flash all 3 pads with individual colours and rates, either change to new or return to old based on pulse count
+# EP  Cmd - func_name() - Description
+# 01 0xc0 - switch_pad() - Immediately switch one or all pad(s) to a single value
+# 01 0xc2 - fade_pad() - Immediately change the colour of one or all pad(s), fade and flash available
+# 01 0xc3 - flash_pad() - set 1 or all pad(s) to a colour with variable flash rates
+# 01 0xc8 - switch_pads() - Immediately switch pad(s) to set of colours
+# 01 0xc6 - fade_pads() - Fade pad(s) to value(s)
+# 01 0xc7 - flash_pads - Flash all 3 pads with individual colours and rates, either change to new or return to old based on pulse count
 
 
 import time
@@ -110,7 +110,7 @@ class Gateway():
         Pad numbering: 0:All, 1:Center, 2:Left, 3:Right
         Colour values are 0-255, with 0 being off and 255 being maximum
         Colour should be a tuple of 0-255 values in the format (red, green,blue)
-        Abstraction for command: 0x06 0xc0
+        Abstraction for command: 0xc0
         """
         red, green, blue = colour[0], colour[1], colour[2]
         command = [0x55, 0x06, 0xc0, 0x02, pad, red, green, blue,]
@@ -126,7 +126,7 @@ class Gateway():
         Pad numbering: 0:All, 1:Center, 2:Left, 3:Right
         Colour values are 0-255, with 0 being off and 255 being maximum
         Colour should be a tuple of 0-255 values in the format (red, green,blue)
-        Abstraction for command: 0x09 0xc3
+        Abstraction for command: 0xc3
         """
         red, green, blue = colour[0], colour[1], colour[2]
         command = [0x55, 0x09, 0xc3, 0x1f, pad, on_length, off_length, pulse_count, red, green, blue]
@@ -143,7 +143,7 @@ class Gateway():
         Pad numbering: 0:All, 1:Center, 2:Left, 3:Right
         Colour values are 0-255, with 0 being off and 255 being maximum
         Colour should be a tuple of 0-255 values in the format (red, green,blue)
-        Abstraction for command: 0x08 0xc2
+        Abstraction for command: 0xc2
         """
         red, green, blue = colour[0], colour[1], colour[2]
         command = [0x55, 0x08, 0xc2, 0x0f, pad, pulse_time, pulse_count, red, green, blue]
@@ -158,7 +158,7 @@ class Gateway():
             (R, G, B)
         Empty colour tuples will ignore that pad.
         Ignored pads will continue whatever they were doing previously.
-        Abstraction for command: 0x0e 0xc8
+        Abstraction for command: 0xc8
 
         """
         assert(len(colours) == 3)
@@ -185,7 +185,7 @@ class Gateway():
         Empty colour tuples will ignore that pad.
         TODO investigate time values
         TODO investigate count values
-        Abstraction for command: 0x14 0xc6
+        Abstraction for command: 0xc6
 
         """
         assert(len(pads) == 3)
@@ -230,7 +230,7 @@ class Gateway():
         On pulse length - 0x00 is almost impersceptible,  0xff is ~10 seconds
         Off pulse length - 0x00 is almost impersceptible, 0xff is ~10 seconds
         Number of flashes - odd value leaves pad in new colour, even leaves pad in old, except for 0x00, which changes to new. Values above 0xc6 dont stop.
-        Abstraction for command: 0x17 0xc7
+        Abstraction for command: 0xc7
         """
         assert(len(pads) == 3)
         command = [0x55, 0x17, 0xc7, 0x3e,]

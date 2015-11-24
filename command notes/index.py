@@ -5,18 +5,24 @@
 
 # All known commands for endpoint 01:
 # Packets to this endpoint seem to always start with 0x55
-# EP byte1 byte2 - description
-# 01 0x04 0xd2 - Unknown, no changes to pads
-# 01 0x06 0xc0 - Immediately switch pad(s) to a single value
-# 01 0x08 0xc2 - Immediately change the colour of one or all pad(s), fade and flash available
-# 01 0x09 0xc3 - set 1 or all pad(s) to a colour with variable flash rates
-# 01 0x0a 0xb1 - Unknown, no changes to pads
-# 01 0x0a 0xb3 - Unknown, no changes to pads
-# 01 0x0a 0xd4 - Unknown, no changes to pads
-# 01 0x0e 0xc8 - Immediately switch pad(s) to set of colours
-# 01 0x0f 0xb0 - Startup?
-# 01 0x14 0xc6 - Fade pad(s) to value(s)
-# 01 0x17 0xc7 - Flash all 3 pads with individual colours and rates, either change to new or return to old based on pulse count
+# EP byte[2] - description
+# 01 0xb0 - Startup?
+# 01 0xb1 - Unknown, no changes to pads
+# 01 0xb3 - Unknown, no changes to pads
+
+# 01 0xc0 - Immediately switch pad(s) to a single value
+# 01 0xc2 - Immediately change the colour of one or all pad(s), fade and flash available
+# 01 0xc3 - set 1 or all pad(s) to a colour with variable flash rates
+# 01 0xc6 - Fade pad(s) to value(s)
+# 01 0xc7 - Flash all 3 pads with individual colours and rates, either change to new or return to old based on pulse count
+# 01 0xc8 - Immediately switch pad(s) to set of colours
+
+# 01 0xd2 - Unknown, no changes to pads
+# 01 0xd4 - Unknown, no changes to pads
+
+# Idea: 0xCX are all lighting related
+# Idea: 0x[type][func] type = c, func = 0: 0xc0
+# Will need something better than the method i've been using so far to test this
 
 
 
@@ -36,6 +42,7 @@
 
 # EP 01:
 # Length of command appears to correlate to value of byte 1
+# Message length == packet[1] + 3
 # 0x0e - len() == 17
 len([0x55, 0x0e, 0xc8, 0x06, 0x01, 0xff, 0x6e, 0x00, 0x01, 0x00, 0x6e, 0x18, 0x01, 0xff, 0x00, 0x18, 0x3e,])
 # 0x0a - len() == 13

@@ -1,8 +1,8 @@
 # 0x14 0xc6 - Fade pad(s) to value(s)
 # Byte: use
 # 00: Always 0x55
-# 01: Command
-# 02: command cont
+# 01: Payload size == 20
+# 02: Command
 # 03: Message counter
 # 04: c:enable 0x00:disable, other:enable
 # 05: c:Transition time, 0x00 is immediate

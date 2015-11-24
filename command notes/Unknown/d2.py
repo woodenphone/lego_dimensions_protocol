@@ -1,8 +1,8 @@
-# 0x0a 0xd4 - ?
+# 0xd4 - ?
 # Byte: use
 # 00: Always 0x55
-# 01: Command
-# 02: command cont
+# 01: Payload size ==
+# 02: Command
 # 03: Message counter
 # 04:
 # 05:

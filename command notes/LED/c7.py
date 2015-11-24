@@ -1,8 +1,8 @@
 # 0x17 0xc7 - Flash all 3 pads with individual colours and rates, either change to new or return to old based on pulse count
 # Byte: use
 # 00: Always 0x55
-# 01: 0x17
-# 02: 0xc7
+# 01: 0x17 Payload size == 23
+# 02: 0xc7 Command
 # 03: Message counter?
 # 04: c: 0x00 disables command for pad, other values enable
 # 05: c: On pulse length - 0x00 is almost impersceptible,  0xff is ~10 seconds

@@ -1,9 +1,9 @@
-# 0x0a 0xd4 - Unknown, no changes to pads
+# 0xd4 - Unknown, no changes to pads
 
 
 #[0x55,# 00: Always 0x55
-# 0x0a,# 01: Command
-# 0xd4,# 02: command cont
+# 0x0a,# 01: Payload size == 10
+# 0xd4,# 02: Command
 # 0x31,# 03: Message counter
 # 0x8f,# 04:
 # 0x45,# 05:

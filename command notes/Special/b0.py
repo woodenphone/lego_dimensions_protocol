@@ -1,8 +1,8 @@
-# 0x0f 0xb0 Startup
+# 0xb0 Startup
 # This is always sent before any other commands
 # 00: Always 0x55
-# 01: Command
-# 02: command cont
+# 01: Payload size
+# 02: Command
 # 03: Message counter
 # 04: "("
 # 05: "c"
@@ -22,8 +22,8 @@
 
 
 #[0x55,# 00: Always 0x55
-# 0x0f,# 01: Command
-# 0xb0,# 02: command cont
+# 0x0f,# 01: Payload size == 15
+# 0xb0,# 02: Command
 # 0x01,# 03: Message counter
 # 0x28,# 04: "(" ASCII
 # 0x63,# 05: "c" ASCII

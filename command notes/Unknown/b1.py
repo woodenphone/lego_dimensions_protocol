@@ -1,12 +1,12 @@
-# 0x0a 0xb1 - Unknown, no changes to pads
+# 0xb1 - Unknown, no changes to pads
 # Does not appear to change pads
 
 
 
 #        Byte: use
 #[0x55,# 01: Always 0x55
-# 0x0a,# 02: Command
-# 0xb1,# 03: Command cont.
+# 0x0a,# 02: Payload size ==
+# 0xb1,# 03: Command
 # 0x2f,# 04: Message counter
 # 0xbd,# 05:
 # 0x3d,# 06:
