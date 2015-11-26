@@ -1,0 +1,11 @@
+Misc. notes:
+
+Toy tags cannot be replaced by blank generic NTAG203 tags.
+Toy tags contain a NDEF record, just like regular tags.
+
+While waiting to program a toy tag, the gateway continually sends the UID of the tag on the center pad.
+
+
+I was able to use the Portal addon without a network connection.
+No online auth or level download was required.
+On-disk DLC? :(

@@ -100,3 +100,45 @@ Endpoint 81, 32 bytes long packet
 81[32]: 56 0b 01 00 02 01 04 9a 74 6a 0b 40 80 ac 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 81[32]: 56 0b 01 00 02 00 04 9a 74 6a 0b 40 80 ab 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 81[32]: 56 0b 01 00 02 01 04 9a 74 6a 0b 40 80 ac 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+
+
+
+
+Initial auth of addon figure (Chell):
+Maybe we can figure out how to do full tag reads from this?
+# Initial read of tag  "Hey i've changed tag state", known message type (portal -> console)
+81[32]: 56 0b 02 00 03 00 04 fb 4d 42 9a 40 80 4e 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+
+# ? ask for more data? "What's this new tag?"? (0x04: 4+3 bytes long) (console -> portal)
+01[32]: 55 04 d2 32 03 26 86 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+
+# ? respond to command? (0x12: 18+2 = 17 data bytes long) (portal -> console)
+81[32]: 55 12 32 00 00 00 00 00 00 00 00 00 60 0c 3f bd 04 00 00 1e 23 00 00 00 00 00 00 00 00 00 00 00
+
+# ? ask for other more data? "Tell me more about this new tag"? (0x0a: 10+2 = 9 data bytes long) (console -> portal)
+01[32]: 55 0a d4 33 db 13 f9 72 6b 12 d5 be cf 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+
+# ? respond to other command? (0x0a: 10+3 bytes long) (portal -> console)
+81[32]: 55 0a 33 00 14 7f 4d e2 75 e3 75 df 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+
+# Place/remove tag repeatedly for 10+ seconds "Hey i've changed tag state", "hey...",...
+81[32]: 56 0b 02 00 03 01 04 fb 4d 42 9a 40 80 4f 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+81[32]: 56 0b 02 00 03 00 04 fb 4d 42 9a 40 80 4e 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+81[32]: 56 0b 02 00 03 01 04 fb 4d 42 9a 40 80 4f 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+81[32]: 56 0b 02 00 03 00 04 fb 4d 42 9a 40 80 4e 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
