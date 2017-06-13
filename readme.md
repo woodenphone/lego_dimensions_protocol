@@ -43,6 +43,7 @@ Install Libusb (and Libusb1) from pip.
 Download Reposotory from green clone button, or in command line
 ```git clone https://github.com/woodenphone/lego_dimensions_protocol```
 
-Run morse.py to check if everything worked.
+Run "morse.py" to test that everything worked.
+If the pads on the gateway portal device begin flashing, you have succeeded in installing everything.
 
 
