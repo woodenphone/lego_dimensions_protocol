@@ -35,7 +35,7 @@ If the pads on the gateway portal device begin flashing, you have succeeded in i
 Linux Installation:
 
 Make sure Python 2.x is installed. 
-```sudo apt-get python``` for debian users. Other distros will vary. 
+```sudo apt-get install python``` for debian users. Other distros will vary. 
 Install pyusb from your software center and pip. 
 
 Install Libusb (and Libusb1) from pip.
