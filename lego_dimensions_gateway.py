@@ -47,6 +47,11 @@ class Gateway():
         if dev is None:
             raise ValueError('Device not found')
 
+        self.reattach = False
+        if dev.is_kernel_driver_active(0):
+            self.reattach = True
+            dev.detach_kernel_driver(0)
+
         # set the active configuration. With no arguments, the first
         # configuration will be the active one
         dev.set_configuration()
@@ -70,6 +75,13 @@ class Gateway():
             if result >= 256:
                 result -= 256
         return result
+
+    def __del__(self):
+        """
+        Reattach the device when we are done with the object
+        """
+        if self.reattach:
+            self.dev.attach_kernel_driver(0)
 
     def pad_message(self,message):
         """Pad a message to 32 bytes"""
